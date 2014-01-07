@@ -89,19 +89,16 @@ namespace std {
     template<class Allocator>
     basic_string_view(const basic_string<charT, traits, Allocator>& str) noexcept;
     constexpr basic_string_view(const charT* str);
-The above constructor is constexpr to take advantage of user-written traits classes that might provide a constexpr length() function. It can't be part of a constant expression with std::char_traits<char> without changes to that class.
 
      constexpr basic_string_view(const charT* str, size_type len);
-No initializer_list constructor because [dcl.init.list]p6 says it would likely store a dangling reference into the basic_string_view.
 
      // [string.view.iterators], iterators
     constexpr const_iterator begin() const noexcept;
     constexpr const_iterator end() const noexcept;
     constexpr const_iterator cbegin() const noexcept;
     constexpr const_iterator cend() const noexcept;
-reverse_iterator methods aren’t constexpr because reverse_iterator isn’t a literal type. See LWG Issue 2208.
 
-     const_reverse_iterator rbegin() const noexcept;
+    const_reverse_iterator rbegin() const noexcept;
     const_reverse_iterator rend() const noexcept;
     const_reverse_iterator crbegin() const noexcept;
     const_reverse_iterator crend() const noexcept;
@@ -178,7 +175,7 @@ reverse_iterator methods aren’t constexpr because reverse_iterator isn’t a l
 namespace std { namespace experimental { inline namespace __library_fundamentals {
   
     template <class _T>
-    constexpr _T __min ( const _T& __t1, const _T& __t2 )
+    constexpr _T __sv_min ( const _T& __t1, const _T& __t2 )
     { return __t1 > __t2 ? __t2 : __t1; }
     
     template <class _T1> struct __identity { typedef _T1 type; };
@@ -187,18 +184,18 @@ namespace std { namespace experimental { inline namespace __library_fundamentals
     class basic_string_view {
     public:
         // types
-        typedef _Traits                             traits_type;
-        typedef _CharT                              value_type;
-        typedef const _CharT*                       pointer;
-        typedef const _CharT*                       const_pointer;
-        typedef const _CharT&                       reference;
-        typedef const _CharT&                       const_reference;
-        typedef const_pointer                       const_iterator; // See [string.view.iterators]
-        typedef const_iterator                      iterator;
-        typedef reverse_iterator<const_iterator>    const_reverse_iterator;
-        typedef const_reverse_iterator              reverse_iterator;
-        typedef size_t                              size_type;
-        typedef ptrdiff_t                           difference_type;
+        typedef _Traits                                    traits_type;
+        typedef _CharT                                     value_type;
+        typedef const _CharT*                              pointer;
+        typedef const _CharT*                              const_pointer;
+        typedef const _CharT&                              reference;
+        typedef const _CharT&                              const_reference;
+        typedef const_pointer                              const_iterator; // See [string.view.iterators]
+        typedef const_iterator                             iterator;
+        typedef _VSTD::reverse_iterator<const_iterator>    const_reverse_iterator;
+        typedef const_reverse_iterator                     reverse_iterator;
+        typedef size_t                                     size_type;
+        typedef ptrdiff_t                                  difference_type;
         static constexpr size_type npos = size_type(-1);
 
         // [string.view.cons], construct/copy
@@ -279,7 +276,7 @@ namespace std { namespace experimental { inline namespace __library_fundamentals
         {
             if ( __pos > size())
                 throw out_of_range{"string_view::copy"};
-            size_type rlen_ = __min ( __n, size() - __pos );
+            size_type rlen_ = __sv_min ( __n, size() - __pos );
             copy_n(begin() + __pos, rlen_, __s );
             return rlen_;
         }
@@ -288,13 +285,13 @@ namespace std { namespace experimental { inline namespace __library_fundamentals
         {
             if (__pos > size())
                 throw out_of_range{"string_view::substr"};
-            size_type rlen_ = __min ( __n, size() - __pos );
+            size_type rlen_ = __sv_min ( __n, size() - __pos );
             return basic_string_view{data() + __pos, rlen_};
         }
 
         int compare(basic_string_view _sv) const _NOEXCEPT
         {
-            size_type rlen_ = __min ( size(), _sv.size());
+            size_type rlen_ = __sv_min ( size(), _sv.size());
             int retval_ = _Traits::compare(data(), _sv.data(), rlen_);
             if ( retval_ == 0 ) // first rlen_ chars matched
                 retval_ = size() == _sv.size() ? 0 : ( size() < _sv.size() ? -1 : 1 );
@@ -373,7 +370,7 @@ namespace std { namespace experimental { inline namespace __library_fundamentals
         {
             _LIBCPP_ASSERT(__n == 0 || __s != nullptr, "string_view::rfind(): recieved nullptr");
             size_type __sz = size();
-            __pos = _VSTD::min(__pos, __sz);
+            __pos = __sv_min(__pos, __sz);
             if (__n < __sz - __pos)
                 __pos += __n;
             else
