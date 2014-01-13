@@ -26,21 +26,21 @@
 
 template<typename CharT>
 void test1 ( std::experimental::basic_string_view<CharT> sv, size_t n, size_t pos ) {
-	const size_t rlen = std::min ( n, sv.size() - pos );
+    const size_t rlen = std::min ( n, sv.size() - pos );
 
-	CharT *dest1 = new CharT [rlen + 1];	dest1[rlen] = 0;
-	CharT *dest2 = new CharT [rlen + 1];	dest2[rlen] = 0;
-	
-	try {
-		sv.copy(dest1, n, pos);
-		std::copy_n(sv.begin() + pos, rlen, dest2);
+    CharT *dest1 = new CharT [rlen + 1];    dest1[rlen] = 0;
+    CharT *dest2 = new CharT [rlen + 1];    dest2[rlen] = 0;
+    
+    try {
+        sv.copy(dest1, n, pos);
+        std::copy_n(sv.begin() + pos, rlen, dest2);
 
-		for ( size_t i = 0; i <= rlen; ++i )
-			assert ( dest1[i] == dest2[i] );
-		}
-	catch ( const std::out_of_range & ) { assert ( pos > sv.size()); }
-	delete [] dest1;
-	delete [] dest2;	
+        for ( size_t i = 0; i <= rlen; ++i )
+            assert ( dest1[i] == dest2[i] );
+        }
+    catch ( const std::out_of_range & ) { assert ( pos > sv.size()); }
+    delete [] dest1;
+    delete [] dest2;    
 }
 
 
@@ -50,22 +50,22 @@ void test ( const CharT *s ) {
     
     string_view_t sv1 { s };
 
-	test1(sv1,  0, 0);
-	test1(sv1,  1, 0);
-	test1(sv1, 20, 0);
- 	test1(sv1, sv1.size(), 0);
-	test1(sv1, 20, string_view_t::npos);
-	
-	test1(sv1,   0, 3);
-	test1(sv1,   2, 3);
-	test1(sv1, 100, 3);
-	test1(sv1, 100, string_view_t::npos);
+    test1(sv1,  0, 0);
+    test1(sv1,  1, 0);
+    test1(sv1, 20, 0);
+    test1(sv1, sv1.size(), 0);
+    test1(sv1, 20, string_view_t::npos);
+    
+    test1(sv1,   0, 3);
+    test1(sv1,   2, 3);
+    test1(sv1, 100, 3);
+    test1(sv1, 100, string_view_t::npos);
 
-	test1(sv1, sv1.size(), string_view_t::npos);
+    test1(sv1, sv1.size(), string_view_t::npos);
 
-	test1(sv1, sv1.size() + 1, 0);
-	test1(sv1, sv1.size() + 1, 1);
-	test1(sv1, sv1.size() + 1, string_view_t::npos);
+    test1(sv1, sv1.size() + 1, 0);
+    test1(sv1, sv1.size() + 1, 1);
+    test1(sv1, sv1.size() + 1, string_view_t::npos);
 
 }
 

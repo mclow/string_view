@@ -19,42 +19,42 @@
 
 template<typename CharT>
 void test ( const CharT *s, size_t len ) {
-	{
-	std::experimental::basic_string_view<CharT> sv1 ( s );
-	assert ( sv1.size() == len );
-	assert ( sv1.data() == s );
+    {
+    std::experimental::basic_string_view<CharT> sv1 ( s );
+    assert ( sv1.size() == len );
+    assert ( sv1.data() == s );
 
-	if ( len > 0 ) {
-		sv1.remove_suffix ( 1 );
-		assert ( sv1.size() == (len - 1));
-		assert ( sv1.data() == s);
-		}
-		
-	sv1.remove_suffix ( len - 1 );
-	assert ( sv1.size() == 0 );
+    if ( len > 0 ) {
+        sv1.remove_suffix ( 1 );
+        assert ( sv1.size() == (len - 1));
+        assert ( sv1.data() == s);
+        }
+        
+    sv1.remove_suffix ( len - 1 );
+    assert ( sv1.size() == 0 );
 
-	std::experimental::basic_string_view<CharT> sv2 ( s );
-	sv2.remove_suffix ( len << 1 );
-	assert ( sv1.size() == 0 );	
-	}
+    std::experimental::basic_string_view<CharT> sv2 ( s );
+    sv2.remove_suffix ( len << 1 );
+    assert ( sv1.size() == 0 ); 
+    }
 }
 
 int main () {
-	test ( "ABCDE", 5 );
-	test ( "a", 1 );
-	test ( "", 0 );
+    test ( "ABCDE", 5 );
+    test ( "a", 1 );
+    test ( "", 0 );
 
-	test ( L"ABCDE", 5 );
-	test ( L"a", 1 );
-	test ( L"", 0 );
+    test ( L"ABCDE", 5 );
+    test ( L"a", 1 );
+    test ( L"", 0 );
 
-	test ( u"ABCDE", 5 );
-	test ( u"a", 1 );
-	test ( u"", 0 );
+    test ( u"ABCDE", 5 );
+    test ( u"a", 1 );
+    test ( u"", 0 );
 
-	test ( U"ABCDE", 5 );
-	test ( U"a", 1 );
-	test ( U"", 0 );
+    test ( U"ABCDE", 5 );
+    test ( U"a", 1 );
+    test ( U"", 0 );
 }
 #else
 int main () {}

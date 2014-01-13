@@ -19,29 +19,29 @@
 
 template<typename T>
 void test () {
-	{
-	constexpr T sv1;
-	static_assert ( sv1.size() == 0, "" );
-	static_assert ( sv1.empty(), "");
-	}
-	
-	{
-	T sv1;
-	assert ( sv1.size() == 0 );
-	assert ( sv1.empty());
-	}
+    {
+    constexpr T sv1;
+    static_assert ( sv1.size() == 0, "" );
+    static_assert ( sv1.empty(), "");
+    }
+    
+    {
+    T sv1;
+    assert ( sv1.size() == 0 );
+    assert ( sv1.empty());
+    }
 }
 
 int main () {
-	using string_view    = std::experimental::string_view;
-	using u16string_view = std::experimental::u16string_view;
-	using u32string_view = std::experimental::u32string_view;
-	using wstring_view   = std::experimental::wstring_view;
+    using string_view    = std::experimental::string_view;
+    using u16string_view = std::experimental::u16string_view;
+    using u32string_view = std::experimental::u32string_view;
+    using wstring_view   = std::experimental::wstring_view;
 
-	test<string_view> ();
-	test<u16string_view> ();
-	test<u32string_view> ();
-	test<wstring_view> ();
+    test<string_view> ();
+    test<u16string_view> ();
+    test<u32string_view> ();
+    test<wstring_view> ();
 
 }
 #else

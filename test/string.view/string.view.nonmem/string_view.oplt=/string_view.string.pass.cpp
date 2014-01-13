@@ -11,9 +11,9 @@
 
 // template<class charT, class traits, class Allocator>
 //   bool operator<=(const basic_string<charT,traits,Allocator>& lhs,
-//					 basic_string_view<charT,traits> rhs);
+//                   basic_string_view<charT,traits> rhs);
 //   bool operator<=(basic_string_view<charT,traits> lhs,
-//		      const basic_string<charT,traits,Allocator>&  rhs);
+//            const basic_string<charT,traits,Allocator>&  rhs);
 
 #include <experimental/string_view>
 #include <cassert>

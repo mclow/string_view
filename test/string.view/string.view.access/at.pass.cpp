@@ -19,36 +19,36 @@
 
 template <typename CharT>
 void test ( const CharT *s, size_t len ) {
-	std::experimental::basic_string_view<CharT> sv ( s, len );
-	assert ( sv.length() == len );
-	for ( size_t i = 0; i < len; ++i ) {
-		assert (  sv.at(i) == s[i] );
-		assert ( &sv.at(i) == s + i );
-		}
+    std::experimental::basic_string_view<CharT> sv ( s, len );
+    assert ( sv.length() == len );
+    for ( size_t i = 0; i < len; ++i ) {
+        assert (  sv.at(i) == s[i] );
+        assert ( &sv.at(i) == s + i );
+        }
 
-	try { sv.at(len); } catch ( const std::out_of_range & ) { return ; }
-	assert ( false );
-	}
-	
+    try { sv.at(len); } catch ( const std::out_of_range & ) { return ; }
+    assert ( false );
+    }
+    
 int main () {
-	test ( "ABCDE", 5 );
-	test ( "a", 1 );
+    test ( "ABCDE", 5 );
+    test ( "a", 1 );
 
-	test ( L"ABCDE", 5 );
-	test ( L"a", 1 );
+    test ( L"ABCDE", 5 );
+    test ( L"a", 1 );
 
-	test ( u"ABCDE", 5 );
-	test ( u"a", 1 );
+    test ( u"ABCDE", 5 );
+    test ( u"a", 1 );
 
-	test ( U"ABCDE", 5 );
-	test ( U"a", 1 );
+    test ( U"ABCDE", 5 );
+    test ( U"a", 1 );
 
-	{
-	constexpr std::experimental::basic_string_view<char> sv ( "ABC", 2 );
-	static_assert ( sv.length() ==  2,  "" );
-	static_assert ( sv.at(0) == 'A', "" );
-	static_assert ( sv.at(1) == 'B', "" );
-	}
+    {
+    constexpr std::experimental::basic_string_view<char> sv ( "ABC", 2 );
+    static_assert ( sv.length() ==  2,  "" );
+    static_assert ( sv.at(0) == 'A', "" );
+    static_assert ( sv.at(1) == 'B', "" );
+    }
 }
 #else
 int main () {}

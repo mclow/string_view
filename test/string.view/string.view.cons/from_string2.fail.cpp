@@ -22,15 +22,15 @@
 struct dummy_char_traits : public std::char_traits<char> {};
 
 int main () {
-	using string_view = std::experimental::basic_string_view<char, dummy_char_traits>;
-	using string      = std::              basic_string     <char>;
-	
-	{
-	string s{"QBCDE"};
-	string_view sv1 ( s );
-	assert ( sv1.size() == s.size());
-	assert ( sv1.data() == s.data());
-	}
+    using string_view = std::experimental::basic_string_view<char, dummy_char_traits>;
+    using string      = std::              basic_string     <char>;
+    
+    {
+    string s{"QBCDE"};
+    string_view sv1 ( s );
+    assert ( sv1.size() == s.size());
+    assert ( sv1.data() == s.data());
+    }
 }
 #else
 #error

@@ -42,10 +42,10 @@ test(S s)
 
 int main()
 {
-	using string_view    = std::experimental::string_view;
-	using u16string_view = std::experimental::u16string_view;
-	using u32string_view = std::experimental::u32string_view;
-	using wstring_view   = std::experimental::wstring_view;
+    using string_view    = std::experimental::string_view;
+    using u16string_view = std::experimental::u16string_view;
+    using u32string_view = std::experimental::u32string_view;
+    using wstring_view   = std::experimental::wstring_view;
 
     test(string_view   {});
     test(string_view   { "123"});
@@ -61,17 +61,17 @@ int main()
     constexpr u16string_view u16sv {u"123", 3 };
     constexpr u32string_view u32sv {U"123", 3 };
     constexpr wstring_view     wsv {L"123", 3 };
-	
-	static_assert (    *sv.begin() ==    sv[0], "" );
-	static_assert ( *u16sv.begin() == u16sv[0], "" );
-	static_assert ( *u32sv.begin() == u32sv[0], "" );
-	static_assert (   *wsv.begin() ==   wsv[0], "" );
+    
+    static_assert (    *sv.begin() ==    sv[0], "" );
+    static_assert ( *u16sv.begin() == u16sv[0], "" );
+    static_assert ( *u32sv.begin() == u32sv[0], "" );
+    static_assert (   *wsv.begin() ==   wsv[0], "" );
 
-	static_assert (    *sv.cbegin() ==    sv[0], "" );
-	static_assert ( *u16sv.cbegin() == u16sv[0], "" );
-	static_assert ( *u32sv.cbegin() == u32sv[0], "" );
-	static_assert (   *wsv.cbegin() ==   wsv[0], "" );
-	}
+    static_assert (    *sv.cbegin() ==    sv[0], "" );
+    static_assert ( *u16sv.cbegin() == u16sv[0], "" );
+    static_assert ( *u32sv.cbegin() == u32sv[0], "" );
+    static_assert (   *wsv.cbegin() ==   wsv[0], "" );
+    }
 }
 #else
 int main () {}

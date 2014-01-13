@@ -28,7 +28,7 @@ void
 test( const CharT *s1, const CharT *s2, int expected)
 {
     typedef std::experimental::basic_string_view<CharT> string_view_t;
-	string_view_t sv1 { s1 };
+    string_view_t sv1 { s1 };
     test1 ( sv1, s2, expected );
 }
 

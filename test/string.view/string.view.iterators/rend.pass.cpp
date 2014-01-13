@@ -50,10 +50,10 @@ test(S s)
 
 int main()
 {
-	using string_view    = std::experimental::string_view;
-	using u16string_view = std::experimental::u16string_view;
-	using u32string_view = std::experimental::u32string_view;
-	using wstring_view   = std::experimental::wstring_view;
+    using string_view    = std::experimental::string_view;
+    using u16string_view = std::experimental::u16string_view;
+    using u32string_view = std::experimental::u32string_view;
+    using wstring_view   = std::experimental::wstring_view;
 
     test(string_view   {});
     test(string_view   { "123"});

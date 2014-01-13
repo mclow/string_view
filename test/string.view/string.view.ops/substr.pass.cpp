@@ -25,14 +25,14 @@
 
 template<typename CharT>
 void test1 ( std::experimental::basic_string_view<CharT> sv, size_t n, size_t pos ) {
-	try {
-		std::experimental::basic_string_view<CharT> sv1 = sv.substr(pos, n);
-		const size_t rlen = std::min ( n, sv.size() - pos );
-		assert ( sv1.size() == rlen );
-		for ( size_t i = 0; i <= rlen; ++i )
-			assert ( sv[pos+i] == sv1[i] );
-		}
-	catch ( const std::out_of_range & ) { assert ( pos > sv.size()); }
+    try {
+        std::experimental::basic_string_view<CharT> sv1 = sv.substr(pos, n);
+        const size_t rlen = std::min ( n, sv.size() - pos );
+        assert ( sv1.size() == rlen );
+        for ( size_t i = 0; i <= rlen; ++i )
+            assert ( sv[pos+i] == sv1[i] );
+        }
+    catch ( const std::out_of_range & ) { assert ( pos > sv.size()); }
 }
 
 
@@ -42,22 +42,22 @@ void test ( const CharT *s ) {
     
     string_view_t sv1 { s };
 
-	test1(sv1,  0, 0);
-	test1(sv1,  1, 0);
-	test1(sv1, 20, 0);
- 	test1(sv1, sv1.size(), 0);
-	
-	test1(sv1,   0, 3);
-	test1(sv1,   2, 3);
-	test1(sv1, 100, 3);
+    test1(sv1,  0, 0);
+    test1(sv1,  1, 0);
+    test1(sv1, 20, 0);
+    test1(sv1, sv1.size(), 0);
+    
+    test1(sv1,   0, 3);
+    test1(sv1,   2, 3);
+    test1(sv1, 100, 3);
 
- 	test1(sv1, 0, string_view_t::npos);
- 	test1(sv1, 2, string_view_t::npos);
-	test1(sv1, sv1.size(), string_view_t::npos);
+    test1(sv1, 0, string_view_t::npos);
+    test1(sv1, 2, string_view_t::npos);
+    test1(sv1, sv1.size(), string_view_t::npos);
 
-	test1(sv1, sv1.size() + 1, 0);
-	test1(sv1, sv1.size() + 1, 1);
-	test1(sv1, sv1.size() + 1, string_view_t::npos);
+    test1(sv1, sv1.size() + 1, 0);
+    test1(sv1, sv1.size() + 1, 1);
+    test1(sv1, sv1.size() + 1, string_view_t::npos);
 }
 
 int main () {
@@ -90,8 +90,8 @@ int main () {
     static_assert ( sv2[0] == 'A', "" );
     static_assert ( sv2[1] == 'B', "" );
     static_assert ( sv2[2] == 'C', "" );
-	}
-	
+    }
+    
     {
     constexpr std::experimental::string_view sv2 = sv1.substr ( 3, 0 );
     static_assert ( sv2.size() == 0, "" );
@@ -102,7 +102,7 @@ int main () {
     static_assert ( sv2.size() == 2, "" );
     static_assert ( sv2[0] == 'D', "" );
     static_assert ( sv2[1] == 'E', "" );
-	}
+    }
     }
     
 }

@@ -50,10 +50,10 @@ test(S s)
 
 int main()
 {
-	using string_view    = std::experimental::string_view;
-	using u16string_view = std::experimental::u16string_view;
-	using u32string_view = std::experimental::u32string_view;
-	using wstring_view   = std::experimental::wstring_view;
+    using string_view    = std::experimental::string_view;
+    using u16string_view = std::experimental::u16string_view;
+    using u32string_view = std::experimental::u32string_view;
+    using wstring_view   = std::experimental::wstring_view;
 
     test(string_view   {});
     test(string_view   { "123"});
@@ -69,17 +69,17 @@ int main()
     constexpr u16string_view u16sv {u"123", 3 };
     constexpr u32string_view u32sv {U"123", 3 };
     constexpr wstring_view     wsv {L"123", 3 };
-	
-	static_assert (    sv.begin() !=    sv.end(), "" );
-	static_assert ( u16sv.begin() != u16sv.end(), "" );
-	static_assert ( u32sv.begin() != u32sv.end(), "" );
-	static_assert (   wsv.begin() !=   wsv.end(), "" );
+    
+    static_assert (    sv.begin() !=    sv.end(), "" );
+    static_assert ( u16sv.begin() != u16sv.end(), "" );
+    static_assert ( u32sv.begin() != u32sv.end(), "" );
+    static_assert (   wsv.begin() !=   wsv.end(), "" );
 
-	static_assert (    sv.begin() !=    sv.cend(), "" );
-	static_assert ( u16sv.begin() != u16sv.cend(), "" );
-	static_assert ( u32sv.begin() != u32sv.cend(), "" );
-	static_assert (   wsv.begin() !=   wsv.cend(), "" );
-	}
+    static_assert (    sv.begin() !=    sv.cend(), "" );
+    static_assert ( u16sv.begin() != u16sv.cend(), "" );
+    static_assert ( u32sv.begin() != u32sv.cend(), "" );
+    static_assert (   wsv.begin() !=   wsv.cend(), "" );
+    }
 }
 #else
 int main () {}

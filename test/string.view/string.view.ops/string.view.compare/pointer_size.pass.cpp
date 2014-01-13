@@ -22,7 +22,7 @@ template<typename CharT>
 void test1 ( std::experimental::basic_string_view<CharT> sv1, 
              size_t pos1, size_t n1, const CharT *s, int expected ) {
     try {
-    	assert(sign(sv1.compare(pos1, n1, s)) == sign(expected));
+        assert(sign(sv1.compare(pos1, n1, s)) == sign(expected));
         assert(pos1 <= sv1.size());
     }
     catch (const std::out_of_range&) { assert(pos1 > sv1.size()); }
@@ -33,7 +33,7 @@ void
 test( const CharT *s1, size_t pos1, size_t n1, const CharT *s2, int expected)
 {
     typedef std::experimental::basic_string_view<CharT> string_view_t;
-	string_view_t sv1 { s1 };
+    string_view_t sv1 { s1 };
     test1 ( sv1, pos1, n1, s2, expected );
 }
 

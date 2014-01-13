@@ -22,8 +22,8 @@ int sign ( int x ) { return x > 0 ? 1 : ( x < 0 ? -1 : 0 ); }
 
 template<typename CharT>
 void test1 ( std::experimental::basic_string_view<CharT> sv1, 
-			std::experimental::basic_string_view<CharT> sv2, int expected ) {
-	assert ( sign( sv1.compare(sv2)) == sign(expected));
+            std::experimental::basic_string_view<CharT> sv2, int expected ) {
+    assert ( sign( sv1.compare(sv2)) == sign(expected));
 }
 
 
@@ -33,7 +33,7 @@ void test ( const CharT *s1, const CharT  *s2, int expected ) {
     
     string_view_t sv1 { s1 };
     string_view_t sv2 { s2 };
-	test1(sv1, sv2, expected);
+    test1(sv1, sv2, expected);
 }
 
 int main () {
