@@ -16,6 +16,8 @@
 #include <string_view>
 #include <cassert>
 
+#if _LIBCPP_STD_VER > 11
+
 int sign ( int x ) { return x > 0 ? 1 : ( x < 0 ? -1 : 0 ); }
 
 template<typename CharT>
@@ -105,3 +107,6 @@ int main () {
     test(U"abcdefghijklmnopqrst", U"abcdefghij", 10);
     test(U"abcdefghijklmnopqrst", U"abcdefghijklmnopqrst", 0);
 }
+#else
+int main () {}
+#endif

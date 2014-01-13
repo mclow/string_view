@@ -14,6 +14,8 @@
 #include <string_view>
 #include <cassert>
 
+#if _LIBCPP_STD_VER > 11
+
 int sign(int x)
 {
     if (x == 0)
@@ -52,3 +54,6 @@ int main()
     test(S("abcdefghijklmnopqrst"), S("abcdefghijklmnopqrst"), 0);
     }
 }
+#else
+int main () {}
+#endif

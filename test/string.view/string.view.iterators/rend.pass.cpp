@@ -14,6 +14,8 @@
 #include <string_view>
 #include <cassert>
 
+#if _LIBCPP_STD_VER > 11
+
 template <class S>
 void
 test(S s)
@@ -62,3 +64,6 @@ int main()
     test(wstring_view  {});
     test(wstring_view  {L"123"});
 }
+#else
+int main () {}
+#endif

@@ -14,6 +14,8 @@
 #include <string_view>
 #include <cassert>
 
+#if _LIBCPP_STD_VER > 11
+
 template <class S>
 void
 test(const S& s, typename S::value_type c, typename S::size_type pos,
@@ -64,3 +66,6 @@ int main()
     test(S("abcdeabcdeabcdeabcde"), 'c', 2);
     }
 }
+#else
+int main () {}
+#endif

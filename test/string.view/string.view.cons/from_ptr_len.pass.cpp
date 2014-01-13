@@ -18,6 +18,8 @@
 #include <string>
 #include <cassert>
 
+#if _LIBCPP_STD_VER > 11
+
 template<typename CharT>
 void test ( const CharT *s, size_t sz ) {
 	{
@@ -70,3 +72,6 @@ int main () {
 	static_assert ( sv1.data() == s, "" );
 	}
 }
+#else
+int main () {}
+#endif

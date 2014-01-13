@@ -18,7 +18,7 @@
 #include <string_view>
 #include <cassert>
 
-#include "min_allocator.h"
+#if _LIBCPP_STD_VER > 11
 
 template <class S>
 void
@@ -50,3 +50,6 @@ int main()
     test(S("abcdefghijklmnopqrst"), S("abcdefghijklmnopqrst"), false, false);
     }
 }
+#else
+int main () {}
+#endif

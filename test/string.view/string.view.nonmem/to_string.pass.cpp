@@ -17,6 +17,8 @@
 #include <string_view>
 #include <cassert>
 
+#if _LIBCPP_STD_VER > 11
+
 template<typename CharT>
 void test ( const CharT *s ) {
 	{
@@ -57,3 +59,6 @@ int main () {
 	test ( U"a" );
 	test ( U"" );
 }
+#else
+int main () {}
+#endif

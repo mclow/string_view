@@ -16,6 +16,8 @@
 #include <string_view>
 #include <cassert>
 
+#if _LIBCPP_STD_VER > 11
+
 template <class S>
 void
 test(S lhs, S rhs, bool x)
@@ -46,3 +48,6 @@ int main()
     test(S("abcdefghijklmnopqrst"), S("abcdefghijklmnopqrst"), true);
     }
 }
+#else
+int main () {}
+#endif

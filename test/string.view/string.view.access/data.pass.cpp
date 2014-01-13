@@ -15,6 +15,8 @@
 #include <string_view>
 #include <cassert>
 
+#if _LIBCPP_STD_VER > 11
+
 template <typename CharT>
 void test ( const CharT *s, size_t len ) {
 	std::experimental::basic_string_view<CharT> sv ( s, len );
@@ -40,4 +42,8 @@ int main () {
 	constexpr std::experimental::basic_string_view<char> sv ( s, 2 );
 	static_assert ( sv.length() ==  2,  "" );
 	static_assert (sv.data() == s, "" );
-	}}
+	}
+	}
+#else
+int main () {}
+#endif

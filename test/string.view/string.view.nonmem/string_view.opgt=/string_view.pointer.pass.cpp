@@ -17,6 +17,8 @@
 #include <string_view>
 #include <cassert>
 
+#if _LIBCPP_STD_VER > 11
+
 template <class S>
 void
 test(const typename S::value_type* lhs, const S& rhs, bool x, bool y)
@@ -47,3 +49,6 @@ int main()
     test("abcdefghijklmnopqrst", S("abcdefghijklmnopqrst"), true, true);
     }
 }
+#else
+int main () {}
+#endif

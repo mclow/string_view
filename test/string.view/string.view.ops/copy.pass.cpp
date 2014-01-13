@@ -22,6 +22,8 @@
 #include <string_view>
 #include <cassert>
 
+#if _LIBCPP_STD_VER > 11
+
 template<typename CharT>
 void test1 ( std::experimental::basic_string_view<CharT> sv, size_t n, size_t pos ) {
 	const size_t rlen = std::min ( n, sv.size() - pos );
@@ -88,3 +90,6 @@ int main () {
     test ( U"a" );
     test ( U"" );
 }
+#else
+int main () {}
+#endif

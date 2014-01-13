@@ -15,6 +15,8 @@
 #include <string_view>
 #include <cassert>
 
+#if _LIBCPP_STD_VER > 11
+
 template<typename T>
 void test () {
 	{
@@ -42,3 +44,7 @@ int main () {
 	test<wstring_view> ();
 
 }
+#else
+int main () {}
+#endif
+

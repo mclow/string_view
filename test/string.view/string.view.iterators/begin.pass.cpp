@@ -14,6 +14,8 @@
 #include <string_view>
 #include <cassert>
 
+#if _LIBCPP_STD_VER > 11
+
 template <class S>
 void
 test(S s)
@@ -71,3 +73,6 @@ int main()
 	static_assert (   *wsv.cbegin() ==   wsv[0], "" );
 	}
 }
+#else
+int main () {}
+#endif

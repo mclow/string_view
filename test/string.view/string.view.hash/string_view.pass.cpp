@@ -22,6 +22,8 @@
 #include <cassert>
 #include <type_traits>
 
+#if _LIBCPP_STD_VER > 11
+
 using std::experimental::string_view;
 
 template <class T>
@@ -53,3 +55,6 @@ int main()
 #endif  // _LIBCPP_HAS_NO_UNICODE_CHARS
     test<std::experimental::wstring_view>();
 }
+#else
+int main () {}
+#endif

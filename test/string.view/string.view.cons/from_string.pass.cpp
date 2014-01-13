@@ -18,6 +18,8 @@
 #include <string>
 #include <cassert>
 
+#if _LIBCPP_STD_VER > 11
+
 struct dummy_char_traits : public std::char_traits<char> {};
 
 template<typename CharT, typename Traits>
@@ -50,3 +52,6 @@ int main () {
 	test ( std::basic_string<char, dummy_char_traits>{} );
 
 }
+#else
+int main () {}
+#endif

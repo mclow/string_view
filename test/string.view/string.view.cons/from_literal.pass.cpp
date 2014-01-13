@@ -18,6 +18,7 @@
 #include <string>
 #include <cassert>
 
+#if _LIBCPP_STD_VER > 11
 
 template<typename CharT>
 constexpr size_t StrLen ( const CharT *s ) {
@@ -67,3 +68,6 @@ int main () {
  	static_assert ( sv1.size() == 5, "");
  	}
 }
+#else
+int main () {}
+#endif

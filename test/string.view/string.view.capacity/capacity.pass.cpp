@@ -19,6 +19,8 @@
 #include <string_view>
 #include <cassert>
 
+#if _LIBCPP_STD_VER > 11
+
 template<typename SV>
 void test1 () {
 	{
@@ -81,3 +83,6 @@ int main () {
 	test2 ( U"a", 1 );
 	test2 ( U"", 0 );
 }
+#else
+int main () {}
+#endif
