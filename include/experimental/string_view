@@ -173,6 +173,7 @@ namespace std {
 #include <algorithm>
 #include <iterator>
 #include <ostream>
+#include <iomanip>
 
 namespace std { namespace experimental { inline namespace __library_fundamentals {
   
@@ -673,14 +674,14 @@ _LIBCPP_BEGIN_NAMESPACE_STD
      return __do_string_hash(__val.data(), __val.data() + __val.size());
  }
 
-// template <class _CharT, class _Traits>
-// __quoted_proxy<_CharT, _Traits>
-// quoted ( std::experimental::basic_string_view <_CharT, _Traits> &__s,
-//              _CharT __delim = _CharT('"'), _CharT __escape=_CharT('\\'))
-// {
-//     return __quoted_output_proxy<_CharT, const _CharT *> 
-//          ( __s.data(), s.data() + __s.size(), __delim, __escape );
-// }
+template <class _CharT, class _Traits>
+__quoted_output_proxy<_CharT, const _CharT *, _Traits>
+quoted ( std::experimental::basic_string_view <_CharT, _Traits> __sv,
+             _CharT __delim = _CharT('"'), _CharT __escape=_CharT('\\'))
+{
+    return __quoted_output_proxy<_CharT, const _CharT *, _Traits> 
+         ( __sv.data(), __sv.data() + __sv.size(), __delim, __escape );
+}
 
 _LIBCPP_END_NAMESPACE_STD
 
