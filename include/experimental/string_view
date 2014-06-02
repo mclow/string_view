@@ -211,8 +211,8 @@ namespace std {
         constexpr basic_string_view (const basic_string_view&) _NOEXCEPT = default;
         basic_string_view& operator=(const basic_string_view&) _NOEXCEPT = default;
 
-        template<class Allocator>
-        basic_string_view(const basic_string<_CharT, _Traits, Allocator>& __str) _NOEXCEPT
+        template<class _Allocator>
+        basic_string_view(const basic_string<_CharT, _Traits, _Allocator>& __str) _NOEXCEPT
             : __data (__str.data()), __size(__str.size()) {}
 
         constexpr basic_string_view(const _CharT* __s)
@@ -242,7 +242,7 @@ namespace std {
         constexpr const_reference operator[](size_type __pos) const { return __data[__pos]; }
         constexpr const_reference at(size_type __pos) const
         {
-            if (__pos >= size ())
+            if (__pos >= size())
                 throw out_of_range{"string_view::at"};
             return __data[__pos]; 
         }
@@ -525,7 +525,7 @@ namespace std {
     constexpr bool operator==(basic_string_view<_CharT, _Traits> __lhs,
                     basic_string_view<_CharT, _Traits> __rhs) _NOEXCEPT
     {
-        if ( __lhs.size () != __rhs.size ()) return false;
+        if ( __lhs.size() != __rhs.size()) return false;
         return __lhs.compare(__rhs) == 0;
     }
 
@@ -533,7 +533,7 @@ namespace std {
     constexpr bool operator==(basic_string_view<_CharT, _Traits> __lhs,
                     typename _VSTD::common_type<basic_string_view<_CharT, _Traits>>::type __rhs) _NOEXCEPT
     {
-        if ( __lhs.size () != __rhs.size ()) return false;
+        if ( __lhs.size() != __rhs.size()) return false;
         return __lhs.compare(__rhs) == 0;
     }
 
@@ -541,7 +541,7 @@ namespace std {
     constexpr bool operator==(typename _VSTD::common_type<basic_string_view<_CharT, _Traits>>::type __lhs, 
                     basic_string_view<_CharT, _Traits> __rhs) _NOEXCEPT
     {
-        if ( __lhs.size () != __rhs.size ()) return false;
+        if ( __lhs.size() != __rhs.size()) return false;
         return __lhs.compare(__rhs) == 0;
     }
 
@@ -550,7 +550,7 @@ namespace std {
     template<class _CharT, class _Traits>
     constexpr bool operator!=(basic_string_view<_CharT, _Traits> __lhs, basic_string_view<_CharT, _Traits> __rhs) _NOEXCEPT
     {
-        if ( __lhs.size () != __rhs.size())
+        if ( __lhs.size() != __rhs.size())
             return true;
         return __lhs.compare(__rhs) != 0;
     }
@@ -559,7 +559,7 @@ namespace std {
     constexpr bool operator!=(basic_string_view<_CharT, _Traits> __lhs,
                     typename _VSTD::common_type<basic_string_view<_CharT, _Traits>>::type __rhs) _NOEXCEPT
     {
-        if ( __lhs.size () != __rhs.size())
+        if ( __lhs.size() != __rhs.size())
             return true;
         return __lhs.compare(__rhs) != 0;
     }
@@ -568,7 +568,7 @@ namespace std {
     constexpr bool operator!=(typename _VSTD::common_type<basic_string_view<_CharT, _Traits>>::type __lhs, 
                     basic_string_view<_CharT, _Traits> __rhs) _NOEXCEPT
     {
-        if ( __lhs.size () != __rhs.size())
+        if ( __lhs.size() != __rhs.size())
             return true;
         return __lhs.compare(__rhs) != 0;
     }
