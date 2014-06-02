@@ -222,12 +222,15 @@ namespace std {
             : __data (__str.data()), __size(__str.size()) {}
 
         constexpr _LIBCPP_INLINE_VISIBILITY
+        basic_string_view(const _CharT* __s, size_type __len)
+            : __data(__s), __size(__len)
+        {
+            _LIBCPP_ASSERT(__len == 0 || __s != nullptr, "string_view::string_view(_CharT *, size_t): recieved nullptr");
+        }
+            
+        constexpr _LIBCPP_INLINE_VISIBILITY
         basic_string_view(const _CharT* __s)
             : __data(__s), __size(_Traits::length(__s)) {}
-
-        constexpr _LIBCPP_INLINE_VISIBILITY
-        basic_string_view(const _CharT* __s, size_type __len)
-            : __data(__s), __size(__len) {}
 
         // [string.view.iterators], iterators
         constexpr _LIBCPP_INLINE_VISIBILITY
