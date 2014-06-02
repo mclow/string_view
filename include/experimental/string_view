@@ -188,8 +188,6 @@ namespace std {
  namespace experimental {
   inline namespace library_fundamentals_v1 {
   
-    template <class _T1> struct __identity { typedef _T1 type; };
-    
     template<class _CharT, class _Traits = _VSTD::char_traits<_CharT>>
     class basic_string_view {
     public:
@@ -215,14 +213,14 @@ namespace std {
 
         template<class Allocator>
         basic_string_view(const basic_string<_CharT, _Traits, Allocator>& __str) _NOEXCEPT
-            : __data (&*__str.begin()), __size(__str.size()) {}
+            : __data (__str.data()), __size(__str.size()) {}
 
         constexpr basic_string_view(const _CharT* __s)
-            : __data (__s), __size(_Traits::length(__s)) {}
+            : __data(__s), __size(_Traits::length(__s)) {}
 
         constexpr basic_string_view(const _CharT* __s, size_type __len)
-            : __data (__s), __size(__len) {}
-            
+            : __data(__s), __size(__len) {}
+
         // [string.view.iterators], iterators
         constexpr const_iterator begin()  const _NOEXCEPT { return cbegin(); }
         constexpr const_iterator end()    const _NOEXCEPT { return cend(); }
@@ -249,16 +247,30 @@ namespace std {
             return __data[__pos]; 
         }
 
-        constexpr const_reference front()                   const { return __data[0]; }
-        constexpr const_reference back()                    const { return __data[__size-1]; }
-        constexpr const_pointer   data()                    const _NOEXCEPT { return __data; }
+        constexpr const_reference front() const
+        {
+        _LIBCPP_ASSERT(!empty(), "string_view::front(): string is empty");
+        return __data[0];
+        }
+        
+        constexpr const_reference back() const
+        {
+        _LIBCPP_ASSERT(!empty(), "string_view::back(): string is empty");
+        return __data[__size-1];
+        }
+
+        constexpr const_pointer   data() const _NOEXCEPT { return __data; }
 
         // [string.view.modifiers], modifiers:
-        void clear() _NOEXCEPT { __size = 0; }
+        void clear() _NOEXCEPT
+        {
+            __data = nullptr;
+            __size = 0;
+        }
         
         void remove_prefix(size_type __n) _NOEXCEPT
         {
-            if ( __n > __size )
+            if (__n > __size)
                 __n = __size;
             __data += __n;
             __size -= __n;
@@ -266,61 +278,61 @@ namespace std {
             
         void remove_suffix(size_type __n) _NOEXCEPT
         {
-            if ( __n > __size )
+            if (__n > __size)
                 __n = __size;
             __size -= __n;
         }
 
         void swap(basic_string_view& __other) _NOEXCEPT
         {
-            _VSTD::swap ( __data, __other.__data );
-            _VSTD::swap ( __size, __other.__size );
+            _VSTD::swap( __data, __other.__data );
+            _VSTD::swap( __size, __other.__size );
         }
                     
         // [string.view.ops], string operations:
         template<class _Allocator>
         explicit operator basic_string<_CharT, _Traits, _Allocator>() const
-        { return basic_string<_CharT, _Traits, _Allocator> ( begin(), end()); }
+        { return basic_string<_CharT, _Traits, _Allocator>( begin(), end()); }
         
-        template<class Allocator = allocator<_CharT>>
-        basic_string<_CharT, _Traits, Allocator> to_string( const Allocator& __a = Allocator())
-        { return basic_string<_CharT, _Traits, Allocator> ( begin(), end(), __a ); }
+        template<class _Allocator = allocator<_CharT>>
+        basic_string<_CharT, _Traits, _Allocator> to_string( const _Allocator& __a = _Allocator())
+        { return basic_string<_CharT, _Traits, _Allocator> ( begin(), end(), __a ); }
 
         size_type copy(_CharT* __s, size_type __n, size_type __pos = 0) const
         {
             if ( __pos > size())
                 throw out_of_range{"string_view::copy"};
-            size_type rlen_ = _VSTD::min( __n, size() - __pos );
-            copy_n(begin() + __pos, rlen_, __s );
-            return rlen_;
+            size_type __rlen = _VSTD::min( __n, size() - __pos );
+            _VSTD::copy_n(begin() + __pos, __rlen, __s );
+            return __rlen;
         }
         
         constexpr basic_string_view substr(size_type __pos = 0, size_type __n = npos) const
         {
             if (__pos > size())
                 throw out_of_range{"string_view::substr"};
-            size_type rlen_ = _VSTD::min( __n, size() - __pos );
-            return basic_string_view{data() + __pos, rlen_};
+            size_type __rlen = _VSTD::min( __n, size() - __pos );
+            return basic_string_view{data() + __pos, __rlen};
         }
 
         constexpr int compare(basic_string_view __sv) const _NOEXCEPT
         {
-            size_type rlen_ = _VSTD::min( size(), __sv.size());
-            int __retval = _Traits::compare(data(), __sv.data(), rlen_);
-            if ( __retval == 0 ) // first rlen_ chars matched
+            size_type __rlen = _VSTD::min( size(), __sv.size());
+            int __retval = _Traits::compare(data(), __sv.data(), __rlen);
+            if ( __retval == 0 ) // first __rlen chars matched
                 __retval = size() == __sv.size() ? 0 : ( size() < __sv.size() ? -1 : 1 );
             return __retval;
         }
         
-        constexpr int compare(size_type _pos1, size_type __n1, basic_string_view __sv) const
+        constexpr int compare(size_type __pos1, size_type __n1, basic_string_view __sv) const
         {
-            return substr(_pos1, __n1).compare(__sv);
+            return substr(__pos1, __n1).compare(__sv);
         }
 
-        int compare(                       size_type _pos1, size_type __n1, 
-                    basic_string_view _sv, size_type _pos2, size_type __n2) const
+        int compare(                       size_type __pos1, size_type __n1, 
+                    basic_string_view _sv, size_type __pos2, size_type __n2) const
         {
-            return substr(_pos1, __n1).compare(_sv.substr(_pos2, __n2));
+            return substr(__pos1, __n1).compare(_sv.substr(__pos2, __n2));
         }
         
         int compare(const _CharT* __s) const
@@ -328,14 +340,14 @@ namespace std {
             return compare(basic_string_view(__s));
         }
         
-        int compare(size_type _pos1, size_type __n1, const _CharT* __s) const
+        int compare(size_type __pos1, size_type __n1, const _CharT* __s) const
         {
-            return substr(_pos1, __n1).compare(basic_string_view(__s));
+            return substr(__pos1, __n1).compare(basic_string_view(__s));
         }
         
-        int compare(size_type _pos1, size_type __n1, const _CharT* __s, size_type __n2) const
+        int compare(size_type __pos1, size_type __n1, const _CharT* __s, size_type __n2) const
         {
-            return substr(_pos1, __n1).compare(basic_string_view(__s, __n2));
+            return substr(__pos1, __n1).compare(basic_string_view(__s, __n2));
         }
 
         // find
@@ -539,7 +551,7 @@ namespace std {
     constexpr bool operator!=(basic_string_view<_CharT, _Traits> __lhs, basic_string_view<_CharT, _Traits> __rhs) _NOEXCEPT
     {
         if ( __lhs.size () != __rhs.size())
-        	return true;
+            return true;
         return __lhs.compare(__rhs) != 0;
     }
   
@@ -548,7 +560,7 @@ namespace std {
                     typename _VSTD::common_type<basic_string_view<_CharT, _Traits>>::type __rhs) _NOEXCEPT
     {
         if ( __lhs.size () != __rhs.size())
-        	return true;
+            return true;
         return __lhs.compare(__rhs) != 0;
     }
 
@@ -557,7 +569,7 @@ namespace std {
                     basic_string_view<_CharT, _Traits> __rhs) _NOEXCEPT
     {
         if ( __lhs.size () != __rhs.size())
-        	return true;
+            return true;
         return __lhs.compare(__rhs) != 0;
     }
 
@@ -586,9 +598,9 @@ namespace std {
 
     // operator >
     template<class _CharT, class _Traits>
-    bool operator> (basic_string_view<_CharT, _Traits> _lhs, basic_string_view<_CharT, _Traits> _rhs) _NOEXCEPT
+    bool operator> (basic_string_view<_CharT, _Traits> __lhs, basic_string_view<_CharT, _Traits> __rhs) _NOEXCEPT
     {
-        return _lhs.compare(_rhs) > 0;
+        return __lhs.compare(__rhs) > 0;
     }
 
     template<class _CharT, class _Traits>
@@ -608,9 +620,9 @@ namespace std {
 
     // operator <=
     template<class _CharT, class _Traits>
-    bool operator<=(basic_string_view<_CharT, _Traits> _lhs, basic_string_view<_CharT, _Traits> _rhs) _NOEXCEPT
+    bool operator<=(basic_string_view<_CharT, _Traits> __lhs, basic_string_view<_CharT, _Traits> __rhs) _NOEXCEPT
     {
-        return _lhs.compare(_rhs) <= 0;
+        return __lhs.compare(__rhs) <= 0;
     }
 
     template<class _CharT, class _Traits>
@@ -630,9 +642,9 @@ namespace std {
 
     // operator >=
     template<class _CharT, class _Traits>
-    bool operator>=(basic_string_view<_CharT, _Traits> _lhs, basic_string_view<_CharT, _Traits> _rhs) _NOEXCEPT
+    bool operator>=(basic_string_view<_CharT, _Traits> __lhs, basic_string_view<_CharT, _Traits> __rhs) _NOEXCEPT
     {
-        return _lhs.compare(_rhs) >= 0;
+        return __lhs.compare(__rhs) >= 0;
     }
 
 
