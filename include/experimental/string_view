@@ -228,9 +228,17 @@ namespace std {
             _LIBCPP_ASSERT(__len == 0 || __s != nullptr, "string_view::string_view(_CharT *, size_t): recieved nullptr");
         }
             
+//         constexpr _LIBCPP_INLINE_VISIBILITY
+//         basic_string_view(const _CharT* __s)
+//             : __data(__s), __size(_Traits::length(__s)) {}
+// 
         constexpr _LIBCPP_INLINE_VISIBILITY
         basic_string_view(const _CharT* __s)
-            : __data(__s), __size(_Traits::length(__s)) {}
+        {
+            _LIBCPP_ASSERT(__s != nullptr, "string_view::string_view(_CharT *): recieved nullptr");
+            __data = __s;
+            __size = _Traits::length(__s);
+        }
 
         // [string.view.iterators], iterators
         constexpr _LIBCPP_INLINE_VISIBILITY
@@ -285,15 +293,15 @@ namespace std {
         constexpr _LIBCPP_INLINE_VISIBILITY
         const_reference front() const
         {
-        _LIBCPP_ASSERT(!empty(), "string_view::front(): string is empty");
-        return __data[0];
+            _LIBCPP_ASSERT(!empty(), "string_view::front(): string is empty");
+            return __data[0];
         }
         
         constexpr _LIBCPP_INLINE_VISIBILITY
         const_reference back() const
         {
-        _LIBCPP_ASSERT(!empty(), "string_view::back(): string is empty");
-        return __data[__size-1];
+            _LIBCPP_ASSERT(!empty(), "string_view::back(): string is empty");
+            return __data[__size-1];
         }
 
         constexpr _LIBCPP_INLINE_VISIBILITY
