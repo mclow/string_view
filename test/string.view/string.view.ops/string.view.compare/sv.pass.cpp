@@ -10,13 +10,15 @@
 
 // <string_view>
 
-// int compare(basic_string_view str) const noexcept;
+// constexpr int compare(basic_string_view str) const noexcept;
 
 
 #include <experimental/string_view>
 #include <cassert>
 
 #if _LIBCPP_STD_VER > 11
+
+#include "constexpr_char_traits.hpp"
 
 int sign ( int x ) { return x > 0 ? 1 : ( x < 0 ? -1 : 0 ); }
 
@@ -106,6 +108,18 @@ int main () {
     test(U"abcdefghijklmnopqrst", U"abcde", 15);
     test(U"abcdefghijklmnopqrst", U"abcdefghij", 10);
     test(U"abcdefghijklmnopqrst", U"abcdefghijklmnopqrst", 0);
+    
+    {
+    typedef std::experimental::basic_string_view<char, constexpr_char_traits<char>> SV;
+    constexpr SV  sv1 { "abcde", 5 };
+    constexpr SV  sv2 { "abcde", 5 };
+    constexpr SV  sv3 { "edcba0", 6 };
+    static_assert ( sv1.compare(sv2) == 0, "" );
+    static_assert ( sv2.compare(sv1) == 0, "" );
+    static_assert ( sv3.compare(sv2)  > 0, "" );
+    static_assert ( sv2.compare(sv3)  < 0, "" );
+    }
+    
 }
 #else
 int main () {}

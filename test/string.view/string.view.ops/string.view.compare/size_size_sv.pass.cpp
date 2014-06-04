@@ -10,13 +10,15 @@
 
 // <string_view>
 
-// int compare(size_type pos1, size_type n1, basic_string_view str) const;
+// constexpr int compare(size_type pos1, size_type n1, basic_string_view str) const;
 
 
 #include <experimental/string_view>
 #include <cassert>
 
 #if _LIBCPP_STD_VER > 11
+
+#include "constexpr_char_traits.hpp"
 
 int sign ( int x ) { return x > 0 ? 1 : ( x < 0 ? -1 : 0 ); }
 
@@ -382,6 +384,14 @@ int main () {
     test(U"abcde", 2, 4, U"", 3);
     test(U"abcde", 2, 4, U"abcde", 2);
     test(U"ABCde", 2, 4, U"abcde", -1);
+    }
+
+    {
+    typedef std::experimental::basic_string_view<char, constexpr_char_traits<char>> SV;
+    constexpr SV  sv1 { "abcde", 5 };
+    constexpr SV  sv2 { "abcde", 0 };
+    static_assert ( sv1.compare(5, 1, sv2) == 0, "" );
+    static_assert ( sv1.compare(2, 4, sv2) == 1, "" );
     }
 }
 #else

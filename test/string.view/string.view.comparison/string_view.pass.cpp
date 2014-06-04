@@ -16,6 +16,8 @@
 
 #if _LIBCPP_STD_VER > 11
 
+#include "constexpr_char_traits.hpp"
+
 int sign(int x)
 {
     if (x == 0)
@@ -52,6 +54,17 @@ int main()
     test(S("abcdefghijklmnopqrst"), S("abcde"), 15);
     test(S("abcdefghijklmnopqrst"), S("abcdefghij"), 10);
     test(S("abcdefghijklmnopqrst"), S("abcdefghijklmnopqrst"), 0);
+    }
+
+    {
+    typedef std::experimental::basic_string_view<char, constexpr_char_traits<char>> SV;
+    constexpr SV  sv1 { "abcde", 5 };
+    constexpr SV  sv2 { "abcde", 5 };
+    constexpr SV  sv3 { "edcba0", 6 };
+    static_assert ( sv1.compare(sv2) == 0, "" );
+    static_assert ( sv2.compare(sv1) == 0, "" );
+    static_assert ( sv3.compare(sv2)  > 0, "" );
+    static_assert ( sv2.compare(sv3)  < 0, "" );
     }
 }
 #else

@@ -10,15 +10,15 @@
 // <string>
 
 // template<class charT, class traits>
-//   bool operator>(basic_string_view<charT,traits> lhs,
-//                  basic_string_view<charT,traits> rhs);
-//   bool operator>(basic_string_view<charT,traits> lhs,
+//  constexpr bool operator>(basic_string_view<charT,traits> lhs,
 //                  basic_string_view<charT,traits> rhs);
 
 #include <experimental/string_view>
 #include <cassert>
 
 #if _LIBCPP_STD_VER > 11
+
+#include "constexpr_char_traits.hpp"
 
 template <class S>
 void
@@ -48,6 +48,18 @@ int main()
     test(S("abcdefghijklmnopqrst"), S("abcde"), true, false);
     test(S("abcdefghijklmnopqrst"), S("abcdefghij"), true, false);
     test(S("abcdefghijklmnopqrst"), S("abcdefghijklmnopqrst"), false, false);
+    }
+
+    {
+    typedef std::experimental::basic_string_view<char, constexpr_char_traits<char>> SV;
+    constexpr SV  sv1;
+    constexpr SV  sv2 { "abcde", 5 };
+
+    static_assert (!(sv1 > sv1), "" );
+    static_assert (!(sv2 > sv2), "" );
+
+    static_assert (!(sv1 > sv2), "" );
+    static_assert (  sv2 > sv1, "" );
     }
 }
 #else

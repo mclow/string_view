@@ -10,14 +10,16 @@
 // <string>
 
 // template<class charT, class traits, class Allocator>
-//   bool operator<(const charT* lhs, basic_string_wiew<charT,traits> rhs);
+//   constexpr bool operator<(const charT* lhs, basic_string_wiew<charT,traits> rhs);
 // template<class charT, class traits, class Allocator>
-//   bool operator<(basic_string_wiew<charT,traits> lhs, const charT* rhs);
+//   constexpr bool operator<(basic_string_wiew<charT,traits> lhs, const charT* rhs);
 
 #include <experimental/string_view>
 #include <cassert>
 
 #if _LIBCPP_STD_VER > 11
+
+#include "constexpr_char_traits.hpp"
 
 template <class S>
 void
@@ -47,6 +49,23 @@ int main()
     test("abcdefghijklmnopqrst", S("abcde"), false, true);
     test("abcdefghijklmnopqrst", S("abcdefghij"), false, true);
     test("abcdefghijklmnopqrst", S("abcdefghijklmnopqrst"), false, false);
+    }
+    {
+    typedef std::experimental::basic_string_view<char, constexpr_char_traits<char>> SV;
+    constexpr SV  sv1;
+    constexpr SV  sv2 { "abcde", 5 };
+
+    static_assert (!(sv1     < ""), "" );
+    static_assert (!(""      < sv1), "" );
+    static_assert (  sv1     < "abcde", "" );
+    static_assert (!("abcde" < sv1), "" );
+    
+    static_assert (!(sv2      < ""), "" );
+    static_assert (  ""       < sv2, "" );
+    static_assert (!(sv2      < "abcde"), "" );
+    static_assert (!("abcde"  < sv2), "" );
+    static_assert (  sv2      < "abcde0", "" );
+    static_assert (!("abcde0" < sv2), "" );
     }
 }
 #else
