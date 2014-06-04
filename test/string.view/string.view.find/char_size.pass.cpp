@@ -9,12 +9,14 @@
 
 // <string_view>
 
-// size_type find(charT c, size_type pos = 0) const;
+// constexpr size_type find(charT c, size_type pos = 0) const;
 
 #include <experimental/string_view>
 #include <cassert>
 
 #if _LIBCPP_STD_VER > 11
+
+#include "constexpr_char_traits.hpp"
 
 template <class S>
 void
@@ -64,6 +66,19 @@ int main()
     test(S("abcde"), 'c', 2);
     test(S("abcdeabcde"), 'c', 2);
     test(S("abcdeabcdeabcdeabcde"), 'c', 2);
+    }
+    {
+    typedef std::experimental::basic_string_view<char, constexpr_char_traits<char>> SV;
+    constexpr SV  sv1;
+    constexpr SV  sv2 { "abcde", 5 };
+
+    static_assert (sv1.find( 'c', 0 ) == SV::npos, "" );
+    static_assert (sv1.find( 'c', 1 ) == SV::npos, "" );
+    static_assert (sv2.find( 'c', 0 ) == 2, "" );
+    static_assert (sv2.find( 'c', 1 ) == 2, "" );
+    static_assert (sv2.find( 'c', 2 ) == 2, "" );
+    static_assert (sv2.find( 'c', 3 ) == SV::npos, "" );
+    static_assert (sv2.find( 'c', 4 ) == SV::npos, "" );
     }
 }
 #else

@@ -9,12 +9,14 @@
 
 // <string_view>
 
-// size_type find_last_of(charT c, size_type pos = npos) const;
+// constexpr size_type find_last_of(charT c, size_type pos = npos) const;
 
 #include <experimental/string_view>
 #include <cassert>
 
 #if _LIBCPP_STD_VER > 11
+
+#include "constexpr_char_traits.hpp"
 
 template <class S>
 void
@@ -64,6 +66,18 @@ int main()
     test(S("csope"), 'm', S::npos);
     test(S("gfsmthlkon"), 'm', 3);
     test(S("laenfsbridchgotmkqpj"), 'm', 15);
+    }
+
+    {
+    typedef std::experimental::basic_string_view<char, constexpr_char_traits<char>> SV;
+    constexpr SV  sv1;
+    constexpr SV  sv2 { "abcde", 5 };
+
+    static_assert (sv1.find_last_of( 'i', 0 ) == SV::npos, "" );
+    static_assert (sv1.find_last_of( 'i', 1 ) == SV::npos, "" );
+    static_assert (sv2.find_last_of( 'a', 0 ) == 0, "" );
+    static_assert (sv2.find_last_of( 'a', 1 ) == 0, "" );
+    static_assert (sv2.find_last_of( 'e', 5 ) == 4, "" );
     }
 }
 #else

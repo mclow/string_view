@@ -9,12 +9,14 @@
 
 // <string_view>
 
-// size_type find_first_not_of(const charT* s, size_type pos = 0) const;
+// constexpr size_type find_first_not_of(const charT* s, size_type pos = 0) const;
 
 #include <experimental/string_view>
 #include <cassert>
 
 #if _LIBCPP_STD_VER > 11
+
+#include "constexpr_char_traits.hpp"
 
 template <class S>
 void
@@ -147,6 +149,18 @@ int main()
     typedef std::experimental::string_view S;
     test0<S>();
     test1<S>();
+    }
+
+    {
+    typedef std::experimental::basic_string_view<char, constexpr_char_traits<char>> SV;
+    constexpr SV  sv1;
+    constexpr SV  sv2 { "abcde", 5 };
+
+    static_assert (sv1.find_first_not_of( "",      0) == SV::npos, "" );
+    static_assert (sv1.find_first_not_of( "irkhs", 0) == SV::npos, "" );
+    static_assert (sv2.find_first_not_of( "",      0) == 0, "" );
+    static_assert (sv2.find_first_not_of( "gfsrt", 0) == 0, "" );
+    static_assert (sv2.find_first_not_of( "lecar", 0) == 1, "" );
     }
 }
 #else
