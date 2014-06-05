@@ -9,12 +9,14 @@
 
 // <string_view>
 
-// size_type rfind(const basic_string& str, size_type pos = npos) const;
+// constexpr size_type rfind(const basic_string& str, size_type pos = npos) const;
 
 #include <experimental/string_view>
 #include <cassert>
 
 #if _LIBCPP_STD_VER > 11
+
+#include "constexpr_char_traits.hpp"
 
 template <class S>
 void
@@ -146,6 +148,18 @@ int main()
     typedef std::experimental::string_view S;
     test0<S>();
     test1<S>();
+    }
+
+    {
+    typedef std::experimental::basic_string_view<char, constexpr_char_traits<char>> SV;
+    constexpr SV  sv1;
+    constexpr SV  sv2 { "abcde", 5 };
+
+    static_assert (sv1.rfind(sv1) == 0, "" );
+    static_assert (sv1.rfind(sv2) == SV::npos, "" );
+    static_assert (sv2.rfind(sv1) == 5, "" );
+    static_assert (sv2.rfind(sv2) == 0, "" );
+    static_assert (sv2.rfind(sv2, 1) == 0, "" );
     }
 }
 #else

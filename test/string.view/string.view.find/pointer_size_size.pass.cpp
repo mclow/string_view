@@ -377,6 +377,7 @@ int main()
     test2<S>();
     test3<S>();
     }
+
     {
     typedef std::experimental::basic_string_view<char, constexpr_char_traits<char>> SV;
     constexpr SV  sv1;
