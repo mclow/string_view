@@ -14,8 +14,6 @@
 #include <experimental/string_view>
 #include <cassert>
 
-#if _LIBCPP_STD_VER > 11
-
 template <class S>
 void
 test(S s)
@@ -55,15 +53,18 @@ int main()
     using u32string_view = std::experimental::u32string_view;
     using wstring_view   = std::experimental::wstring_view;
 
-    test(string_view   {});
-    test(string_view   { "123"});
-    test(u16string_view{});
+    test(string_view   ());
+    test(u16string_view());
+    test(u32string_view());
+    test(wstring_view  ());
+    test(string_view   ( "123"));
+    test(wstring_view  (L"123"));
+#if __cplusplus >= 201103L
     test(u16string_view{u"123"});
-    test(u32string_view{});
     test(u32string_view{U"123"});
-    test(wstring_view  {});
-    test(wstring_view  {L"123"});
+#endif
 
+#if _LIBCPP_STD_VER > 11
     {
     constexpr string_view       sv { "123", 3 };
     constexpr u16string_view u16sv {u"123", 3 };
@@ -80,7 +81,5 @@ int main()
     static_assert ( u32sv.begin() != u32sv.cend(), "" );
     static_assert (   wsv.begin() !=   wsv.cend(), "" );
     }
-}
-#else
-int main () {}
 #endif
+}

@@ -9,14 +9,10 @@
 
 
 // <string_view>
-
 // constexpr int compare(basic_string_view str) const noexcept;
-
 
 #include <experimental/string_view>
 #include <cassert>
-
-#if _LIBCPP_STD_VER > 11
 
 #include "constexpr_char_traits.hpp"
 
@@ -33,8 +29,8 @@ template<typename CharT>
 void test ( const CharT *s1, const CharT  *s2, int expected ) {
     typedef std::experimental::basic_string_view<CharT> string_view_t;
     
-    string_view_t sv1 { s1 };
-    string_view_t sv2 { s2 };
+    string_view_t sv1 ( s1 );
+    string_view_t sv2 ( s2 );
     test1(sv1, sv2, expected);
 }
 
@@ -57,7 +53,6 @@ int main () {
     test("abcdefghijklmnopqrst", "abcdefghij", 10);
     test("abcdefghijklmnopqrst", "abcdefghijklmnopqrst", 0);
 
-
     test(L"",                     L"", 0);
     test(L"",                     L"abcde", -5);
     test(L"",                     L"abcdefghij", -10);
@@ -75,6 +70,7 @@ int main () {
     test(L"abcdefghijklmnopqrst", L"abcdefghij", 10);
     test(L"abcdefghijklmnopqrst", L"abcdefghijklmnopqrst", 0);
 
+#if __cplusplus >= 201103L
     test(u"",                     u"", 0);
     test(u"",                     u"abcde", -5);
     test(u"",                     u"abcdefghij", -10);
@@ -108,7 +104,9 @@ int main () {
     test(U"abcdefghijklmnopqrst", U"abcde", 15);
     test(U"abcdefghijklmnopqrst", U"abcdefghij", 10);
     test(U"abcdefghijklmnopqrst", U"abcdefghijklmnopqrst", 0);
+#endif
     
+#if _LIBCPP_STD_VER > 11
     {
     typedef std::experimental::basic_string_view<char, constexpr_char_traits<char>> SV;
     constexpr SV  sv1 { "abcde", 5 };
@@ -119,8 +117,5 @@ int main () {
     static_assert ( sv3.compare(sv2)  > 0, "" );
     static_assert ( sv2.compare(sv3)  < 0, "" );
     }
-    
+#endif    
 }
-#else
-int main () {}
-#endif

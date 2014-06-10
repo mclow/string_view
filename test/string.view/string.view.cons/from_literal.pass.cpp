@@ -18,10 +18,10 @@
 #include <string>
 #include <cassert>
 
-#if _LIBCPP_STD_VER > 11
+#include "constexpr_char_traits.hpp"
 
 template<typename CharT>
-constexpr size_t StrLen ( const CharT *s ) {
+size_t StrLen ( const CharT *s ) {
     size_t retVal = 0;
     while ( *s != 0 ) { ++retVal; ++s; }
     return retVal;
@@ -29,20 +29,10 @@ constexpr size_t StrLen ( const CharT *s ) {
 
 template<typename CharT>
 void test ( const CharT *s ) {
-    {
     std::experimental::basic_string_view<CharT> sv1 ( s );
     assert ( sv1.size() == StrLen( s ));
     assert ( sv1.data() == s );
     }
-}
-
-struct dummy_char_traits : public std::char_traits<char> {
-    constexpr static size_t length(const char_type* s) {
-        size_t retVal = 0;
-        while ( *s != 0 ) { ++retVal; ++s; }
-        return retVal;
-        }
-};
 
 
 int main () {
@@ -55,6 +45,7 @@ int main () {
     test ( L"A" );
     test ( L"" );
 
+#if __cplusplus >= 201103L
     test ( u"QBCDE" );
     test ( u"A" );
     test ( u"" );
@@ -62,12 +53,12 @@ int main () {
     test ( U"QBCDE" );
     test ( U"A" );
     test ( U"" );
+#endif
 
+#if _LIBCPP_STD_VER > 11
     {
-    constexpr std::experimental::basic_string_view<char, dummy_char_traits> sv1 ( "ABCDE" );
+    constexpr std::experimental::basic_string_view<char, constexpr_char_traits<char>> sv1 ( "ABCDE" );
     static_assert ( sv1.size() == 5, "");
     }
-}
-#else
-int main () {}
 #endif
+}

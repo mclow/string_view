@@ -16,12 +16,8 @@
 // Effects: Determines the effective length rlen of the string to reference as the smaller of n and size() - pos.
 // Returns: basic_string_view(data()+pos, rlen).
 
-
-
 #include <experimental/string_view>
 #include <cassert>
-
-#if _LIBCPP_STD_VER > 11
 
 template<typename CharT>
 void test1 ( std::experimental::basic_string_view<CharT> sv, size_t n, size_t pos ) {
@@ -40,7 +36,7 @@ template<typename CharT>
 void test ( const CharT *s ) {
     typedef std::experimental::basic_string_view<CharT> string_view_t;
     
-    string_view_t sv1 { s };
+    string_view_t sv1 ( s );
 
     test1(sv1,  0, 0);
     test1(sv1,  1, 0);
@@ -71,6 +67,7 @@ int main () {
     test ( L"a" );
     test ( L"" );
 
+#if __cplusplus >= 201103L
     test ( u"ABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDE" );
     test ( u"ABCDE" );
     test ( u"a" );
@@ -80,7 +77,9 @@ int main () {
     test ( U"ABCDE" );
     test ( U"a" );
     test ( U"" );
+#endif
     
+#if _LIBCPP_STD_VER > 11
     {
     constexpr std::experimental::string_view sv1 { "ABCDE", 5 };
 
@@ -104,8 +103,5 @@ int main () {
     static_assert ( sv2[1] == 'E', "" );
     }
     }
-    
-}
-#else
-int main () {}
 #endif
+}

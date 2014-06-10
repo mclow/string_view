@@ -16,15 +16,13 @@
 #include <experimental/string_view>
 #include <cassert>
 
-#if _LIBCPP_STD_VER > 11
-
 template<typename CharT>
 void test ( const CharT *s ) {
     typedef std::experimental::basic_string_view<CharT> string_view_t;
     typedef std::basic_string<CharT> string_t;
     
     {
-    string_view_t sv1 { s };
+    string_view_t sv1 ( s );
     string_t      str = (string_t) sv1;
 
     assert ( sv1.size() == str.size ());
@@ -32,7 +30,7 @@ void test ( const CharT *s ) {
     }
 
     {
-    string_view_t sv1 {};
+    string_view_t sv1;
     string_t      str = (string_t) sv1;
 
     assert ( sv1.size() == str.size ());
@@ -51,6 +49,7 @@ int main () {
     test ( L"a" );
     test ( L"" );
 
+#if __cplusplus >= 201103L
     test ( u"ABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDE" );
     test ( u"ABCDE" );
     test ( u"a" );
@@ -60,7 +59,5 @@ int main () {
     test ( U"ABCDE" );
     test ( U"a" );
     test ( U"" );
-}
-#else
-int main () {}
 #endif
+}

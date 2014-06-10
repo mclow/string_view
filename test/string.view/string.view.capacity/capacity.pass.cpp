@@ -19,10 +19,9 @@
 #include <experimental/string_view>
 #include <cassert>
 
-#if _LIBCPP_STD_VER > 11
-
 template<typename SV>
 void test1 () {
+#if _LIBCPP_STD_VER > 11
     {
     constexpr SV sv1;
     static_assert ( sv1.size() == 0, "" );
@@ -30,6 +29,7 @@ void test1 () {
     static_assert ( sv1.size() == sv1.length(), "" );
     static_assert ( sv1.max_size() > sv1.size(), "");
     }
+#endif
     
     {
     SV sv1;
@@ -73,6 +73,7 @@ int main () {
     test2 ( L"a", 1 );
     test2 ( L"", 0 );
 
+#if __cplusplus >= 201103L
     test2 ( u"ABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDE", 105 );
     test2 ( u"ABCDE", 5 );
     test2 ( u"a", 1 );
@@ -82,7 +83,5 @@ int main () {
     test2 ( U"ABCDE", 5 );
     test2 ( U"a", 1 );
     test2 ( U"", 0 );
-}
-#else
-int main () {}
 #endif
+}

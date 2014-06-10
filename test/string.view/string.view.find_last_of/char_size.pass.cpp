@@ -14,8 +14,6 @@
 #include <experimental/string_view>
 #include <cassert>
 
-#if _LIBCPP_STD_VER > 11
-
 #include "constexpr_char_traits.hpp"
 
 template <class S>
@@ -68,6 +66,7 @@ int main()
     test(S("laenfsbridchgotmkqpj"), 'm', 15);
     }
 
+#if _LIBCPP_STD_VER > 11
     {
     typedef std::experimental::basic_string_view<char, constexpr_char_traits<char>> SV;
     constexpr SV  sv1;
@@ -79,7 +78,5 @@ int main()
     static_assert (sv2.find_last_of( 'a', 1 ) == 0, "" );
     static_assert (sv2.find_last_of( 'e', 5 ) == 4, "" );
     }
-}
-#else
-int main () {}
 #endif
+}

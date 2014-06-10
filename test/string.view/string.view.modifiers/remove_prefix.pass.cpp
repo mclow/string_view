@@ -16,12 +16,11 @@
 #include <cassert>
 #include <iostream>
 
-#if _LIBCPP_STD_VER > 11
-
 template<typename CharT>
 void test ( const CharT *s, size_t len ) {
+    typedef std::experimental::basic_string_view<CharT> SV;
     {
-    std::experimental::basic_string_view<CharT> sv1 ( s );
+    SV sv1 ( s );
     assert ( sv1.size() == len );
     assert ( sv1.data() == s );
 
@@ -34,11 +33,20 @@ void test ( const CharT *s, size_t len ) {
     sv1.remove_prefix ( len - 1 );
     assert ( sv1.size() == 0 );
 
-    std::experimental::basic_string_view<CharT> sv2 ( s );
+    SV sv2 ( s );
     sv2.remove_prefix ( len << 1 );
     assert ( sv1.size() == 0 ); 
     }
 }
+
+#if _LIBCPP_STD_VER > 11
+constexpr size_t test_ce ( size_t n, size_t k ) {
+    typedef std::experimental::basic_string_view<char> SV;
+    SV sv1{ "ABCDEFGHIJKL", n };
+    sv1.remove_prefix ( k );
+    return sv1.size();
+}
+#endif
 
 int main () {
     test ( "ABCDE", 5 );
@@ -49,6 +57,7 @@ int main () {
     test ( L"a", 1 );
     test ( L"", 0 );
 
+#if __cplusplus >= 201103L
     test ( u"ABCDE", 5 );
     test ( u"a", 1 );
     test ( u"", 0 );
@@ -56,7 +65,15 @@ int main () {
     test ( U"ABCDE", 5 );
     test ( U"a", 1 );
     test ( U"", 0 );
-}
-#else
-int main () {}
 #endif
+
+#if _LIBCPP_STD_VER > 11
+    {
+    static_assert ( test_ce ( 5, 0 ) == 5, "" );
+    static_assert ( test_ce ( 5, 1 ) == 4, "" );
+    static_assert ( test_ce ( 5, 5 ) == 0, "" );
+    static_assert ( test_ce ( 5, 9 ) == 0, "" );
+    static_assert ( test_ce ( 9, 3 ) == 6, "" );
+    }
+#endif
+}

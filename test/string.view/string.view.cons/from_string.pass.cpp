@@ -18,8 +18,6 @@
 #include <string>
 #include <cassert>
 
-#if _LIBCPP_STD_VER > 11
-
 struct dummy_char_traits : public std::char_traits<char> {};
 
 template<typename CharT, typename Traits>
@@ -31,14 +29,15 @@ void test ( const std::basic_string<CharT, Traits> &str ) {
 
 int main () {
 
-    test ( std::string{"QBCDE"} );
-    test ( std::string{""} );
-    test ( std::string{} );
+    test ( std::string("QBCDE") );
+    test ( std::string("") );
+    test ( std::string() );
     
-    test ( std::wstring{L"QBCDE"} );
-    test ( std::wstring{L""} );
-    test ( std::wstring{} );
+    test ( std::wstring(L"QBCDE") );
+    test ( std::wstring(L"") );
+    test ( std::wstring() );
 
+#if __cplusplus >= 201103L
     test ( std::u16string{u"QBCDE"} );
     test ( std::u16string{u""} );
     test ( std::u16string{} );
@@ -46,12 +45,10 @@ int main () {
     test ( std::u32string{U"QBCDE"} );
     test ( std::u32string{U""} );
     test ( std::u32string{} );
+#endif
     
-    test ( std::basic_string<char, dummy_char_traits>{"QBCDE"} );
-    test ( std::basic_string<char, dummy_char_traits>{""} );
-    test ( std::basic_string<char, dummy_char_traits>{} );
+    test ( std::basic_string<char, dummy_char_traits>("QBCDE") );
+    test ( std::basic_string<char, dummy_char_traits>("") );
+    test ( std::basic_string<char, dummy_char_traits>() );
 
 }
-#else
-int main () {}
-#endif

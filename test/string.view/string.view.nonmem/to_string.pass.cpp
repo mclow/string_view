@@ -20,31 +20,35 @@
 #include <cassert>
 #include "min_allocator.h"
 
-#if _LIBCPP_STD_VER > 11
-
 template<typename CharT>
 void test ( const CharT *s ) {
     typedef std::basic_string<CharT> String ;
     {
-    std::experimental::basic_string_view<CharT> sv1 { s };
+    std::experimental::basic_string_view<CharT> sv1 ( s );
     String                                      str1 = (String) sv1;
-    auto                                        str2 = sv1.to_string(min_allocator<CharT>());
     
     assert ( sv1.size() == str1.size ());
-    assert ( sv1.size() == str2.size ());
     assert ( std::char_traits<CharT>::compare ( sv1.data(), str1.data(),  sv1.size()) == 0 );
+
+#if __cplusplus >= 201103L
+    auto str2 = sv1.to_string(min_allocator<CharT>());
+    assert ( sv1.size() == str2.size ());
     assert ( std::char_traits<CharT>::compare ( sv1.data(), str2.data(), sv1.size()) == 0 );
+#endif
     }
 
     {
-    std::experimental::basic_string_view<CharT> sv1 {};
+    std::experimental::basic_string_view<CharT> sv1;
     String                                      str1 = (String) sv1;
-    auto                                        str2 = sv1.to_string(min_allocator<CharT>());
 
     assert ( sv1.size() == str1.size ());
-    assert ( sv1.size() == str2.size ());
     assert ( std::char_traits<CharT>::compare ( sv1.data(), str1.data(), sv1.size()) == 0 );
+
+#if __cplusplus >= 201103L
+    auto str2 = sv1.to_string(min_allocator<CharT>());
+    assert ( sv1.size() == str2.size ());
     assert ( std::char_traits<CharT>::compare ( sv1.data(), str2.data(), sv1.size()) == 0 );
+#endif
     }
 }
 
@@ -59,6 +63,7 @@ int main () {
     test ( L"a" );
     test ( L"" );
 
+#if __cplusplus >= 201103L
     test ( u"ABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDE" );
     test ( u"ABCDE" );
     test ( u"a" );
@@ -68,7 +73,5 @@ int main () {
     test ( U"ABCDE" );
     test ( U"a" );
     test ( U"" );
-}
-#else
-int main () {}
 #endif
+}

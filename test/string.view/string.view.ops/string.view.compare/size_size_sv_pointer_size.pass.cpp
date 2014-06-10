@@ -13,12 +13,8 @@
 // constexpr int compare(size_type pos1, size_type n1,
 //             const charT* s, size_type n2) const;
 
-
-
 #include <experimental/string_view>
 #include <cassert>
-
-#if _LIBCPP_STD_VER > 11
 
 #include "constexpr_char_traits.hpp"
 
@@ -44,7 +40,7 @@ void test ( const CharT *s1, size_t pos1, size_t n1,
             int expected ) {
     typedef std::experimental::basic_string_view<CharT> string_view_t;
     
-    string_view_t sv1 { s1 };
+    string_view_t sv1 ( s1 );
     test1 (sv1, pos1, n1, s2, n2, expected);
 }
 
@@ -1322,6 +1318,7 @@ int main () {
     test(L"abcdefghijklmnopqrst", 10, 0, L"abcdefghij", 10, -10);
     }
 
+#if __cplusplus >= 201103L
     {
     test(U"", 0, 0, U"abcde", 0, 0);
     test(U"", 0, 0, U"abcde", 1, -1);
@@ -1337,7 +1334,9 @@ int main () {
     test(U"abcdefghijklmnopqrst", 21, 0, U"abcde", 1, 0);
     test(U"abcdefghijklmnopqrst", 10, 0, U"abcdefghij", 10, -10);
     }
+#endif
 
+#if _LIBCPP_STD_VER > 11
     {
     typedef std::experimental::basic_string_view<char, constexpr_char_traits<char>> SV;
     constexpr SV  sv1;
@@ -1346,7 +1345,5 @@ int main () {
     static_assert ( sv1.compare(0, 0, "abcde", 1) == -1, "" );
     static_assert ( sv2.compare(0, 0, "abcde", 1, 0) == 0, "" );
     }
-}
-#else
-int main () {}
 #endif
+}

@@ -15,15 +15,15 @@
 #include <experimental/string_view>
 #include <cassert>
 
-#if _LIBCPP_STD_VER > 11
-
 template<typename T>
 void test () {
+#if _LIBCPP_STD_VER > 11
     {
     constexpr T sv1;
     static_assert ( sv1.size() == 0, "" );
     static_assert ( sv1.empty(), "");
     }
+#endif
     
     {
     T sv1;
@@ -44,7 +44,3 @@ int main () {
     test<wstring_view> ();
 
 }
-#else
-int main () {}
-#endif
-

@@ -17,6 +17,7 @@
 #include <cassert>
 
 #if _LIBCPP_STD_VER > 11
+// quoted is C++14 only
 
 bool is_skipws ( const std::istream *is ) {
     return ( is->flags() & std::ios_base::skipws ) != 0;

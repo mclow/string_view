@@ -15,8 +15,6 @@
 #include <stdexcept>
 #include <cassert>
 
-#if _LIBCPP_STD_VER > 11
-
 int sign(int x)
 {
     if (x == 0)
@@ -1304,6 +1302,3 @@ int main()
     test11<S>();
     }
 }
-#else
-int main () {}
-#endif

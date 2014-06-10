@@ -17,8 +17,6 @@
 #include <experimental/string_view>
 #include <cassert>
 
-#if _LIBCPP_STD_VER > 11
-
 #include "constexpr_char_traits.hpp"
 
 template <class S>
@@ -51,6 +49,7 @@ int main()
     test(S("abcdefghijklmnopqrst"), "abcdefghijklmnopqrst", false);
     }
 
+#if _LIBCPP_STD_VER > 11
     {
     typedef std::experimental::basic_string_view<char, constexpr_char_traits<char>> SV;
     constexpr SV  sv1;
@@ -66,7 +65,5 @@ int main()
     static_assert (  sv2      != "abcde0",   "" );
     static_assert (  "abcde0" != sv2, "" );
     }
-}
-#else
-int main () {}
 #endif
+}

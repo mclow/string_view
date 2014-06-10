@@ -14,8 +14,6 @@
 #include <experimental/string_view>
 #include <cassert>
 
-#if _LIBCPP_STD_VER > 11
-
 #include "constexpr_char_traits.hpp"
 
 int sign ( int x ) { return x > 0 ? 1 : ( x < 0 ? -1 : 0 ); }
@@ -30,7 +28,7 @@ void
 test( const CharT *s1, const CharT *s2, int expected)
 {
     typedef std::experimental::basic_string_view<CharT> string_view_t;
-    string_view_t sv1 { s1 };
+    string_view_t sv1 ( s1 );
     test1 ( sv1, s2, expected );
 }
 
@@ -74,6 +72,7 @@ int main()
     test(L"abcdefghijklmnopqrst", L"abcdefghijklmnopqrst", 0);
     }
 
+#if __cplusplus >= 201103L
     {
     test(U"", U"", 0);
     test(U"", U"abcde", -5);
@@ -111,7 +110,9 @@ int main()
     test(u"abcdefghijklmnopqrst", u"abcdefghij", 10);
     test(u"abcdefghijklmnopqrst", u"abcdefghijklmnopqrst", 0);
     }
+#endif
 
+#if _LIBCPP_STD_VER > 11
     {
     typedef std::experimental::basic_string_view<char, constexpr_char_traits<char>> SV;
     constexpr SV  sv1;
@@ -121,8 +122,5 @@ int main()
     static_assert ( sv2.compare("") == 1, "" );
     static_assert ( sv2.compare("abcde") == 0, "" );
     }
-
-}
-#else
-int main () {}
 #endif
+}

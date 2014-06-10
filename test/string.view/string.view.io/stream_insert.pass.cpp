@@ -18,8 +18,6 @@
 #include <sstream>
 #include <cassert>
 
-#if _LIBCPP_STD_VER > 11
-
 using std::experimental::string_view;
 using std::experimental::wstring_view;
 
@@ -58,6 +56,3 @@ int main()
         assert(L"   " + s == out.str());
     }
 }
-#else
-int main () {}
-#endif

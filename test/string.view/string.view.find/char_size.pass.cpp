@@ -14,8 +14,6 @@
 #include <experimental/string_view>
 #include <cassert>
 
-#if _LIBCPP_STD_VER > 11
-
 #include "constexpr_char_traits.hpp"
 
 template <class S>
@@ -67,6 +65,8 @@ int main()
     test(S("abcdeabcde"), 'c', 2);
     test(S("abcdeabcdeabcdeabcde"), 'c', 2);
     }
+
+#if _LIBCPP_STD_VER > 11
     {
     typedef std::experimental::basic_string_view<char, constexpr_char_traits<char>> SV;
     constexpr SV  sv1;
@@ -80,7 +80,5 @@ int main()
     static_assert (sv2.find( 'c', 3 ) == SV::npos, "" );
     static_assert (sv2.find( 'c', 4 ) == SV::npos, "" );
     }
-}
-#else
-int main () {}
 #endif
+}

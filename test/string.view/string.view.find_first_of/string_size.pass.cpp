@@ -14,8 +14,6 @@
 #include <experimental/string_view>
 #include <cassert>
 
-#if _LIBCPP_STD_VER > 11
-
 template <class S>
 void
 test(const S& s, const S& str, typename S::size_type pos, typename S::size_type x)
@@ -148,6 +146,3 @@ int main()
     test1<S>();
     }
 }
-#else
-int main () {}
-#endif

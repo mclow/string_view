@@ -14,8 +14,6 @@
 #include <experimental/string_view>
 #include <cassert>
 
-#if _LIBCPP_STD_VER > 11
-
 #include "constexpr_char_traits.hpp"
 
 template <class S>
@@ -378,6 +376,7 @@ int main()
     test3<S>();
     }
 
+#if _LIBCPP_STD_VER > 11
     {
     typedef std::experimental::basic_string_view<char, constexpr_char_traits<char>> SV;
     constexpr SV  sv1;
@@ -389,7 +388,5 @@ int main()
     static_assert (sv2.find_first_of( "gfsrt", 0, 5) == SV::npos, "" );
     static_assert (sv2.find_first_of( "lecar", 0, 5) == 0, "" );
     }
-}
-#else
-int main () {}
 #endif
+}

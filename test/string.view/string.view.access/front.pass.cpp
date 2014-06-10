@@ -15,8 +15,6 @@
 #include <experimental/string_view>
 #include <cassert>
 
-#if _LIBCPP_STD_VER > 11
-
 template <typename CharT>
 bool test ( const CharT *s, size_t len ) {
     std::experimental::basic_string_view<CharT> sv ( s, len );
@@ -32,18 +30,19 @@ int main () {
     assert ( test ( L"ABCDE", 5 ));
     assert ( test ( L"a", 1 ));
 
+#if __cplusplus >= 201103L
     assert ( test ( u"ABCDE", 5 ));
     assert ( test ( u"a", 1 ));
 
     assert ( test ( U"ABCDE", 5 ));
     assert ( test ( U"a", 1 ));
+#endif
 
+#if _LIBCPP_STD_VER > 11
     {
     constexpr std::experimental::basic_string_view<char> sv ( "ABC", 2 );
     static_assert ( sv.length() ==  2,  "" );
     static_assert ( sv.front()  == 'A', "" );
     }
-}
-#else
-int main () {}
 #endif
+}
